@@ -31,6 +31,7 @@ class Quiz(BaseArticle):
         return ('vodkamartiniquiz_quiz_detail', (), {'slug': self.slug})
 
     class Meta(BaseArticle.Meta):
+        verbose_name_plural = "Quizzes"
         permissions = (
                 ('view_quiz', 'View quiz'),
                 ('take_quiz', 'Can take quiz'),
@@ -41,13 +42,12 @@ class Question(models.Model):
     question = models.TextField()
     quiz = models.ForeignKey(Quiz)
     enabled = models.BooleanField(default=True)
-    #voted_up_by = models.ManyToManyField(User, blank=True, related_name='answers_voted_up') # Users who voted up this answer
 
     def __unicode__(self):
         return "%s..." % (self.question[:50],)
 
 class Answer(models.Model):
-    answer_letter = models.CharField(max_length=1)
+    letter = models.CharField(max_length=1)
     answer = models.TextField()
     question = models.ForeignKey(Question)
     points = models.IntegerField(default=0)
@@ -64,7 +64,7 @@ class QuizResult(models.Model):
     """
     Defines criteria for quiz results.
     """
-    answer_letter = models.CharField(max_length=1)
+    letter = models.CharField(max_length=1)
     quiz = models.ForeignKey(Quiz)
     description = models.TextField()
     min_points = models.IntegerField(default=0)
