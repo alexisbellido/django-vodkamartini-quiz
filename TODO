@@ -1,4 +1,14 @@
 TODO
 
-- Do this.
-- Do that.
+On admin
+- link questions on quiz form to the corresponding question forms.
+- link questions on quiz form to question page on quiz
+- Add some quizzes, questions, answers and quiz results settings from admin and then write the tests for doing the same programatically. Verify changes break tests.
+
+On public interface:
+- Write class based views for list of quizzes, quiz page, list of questions for one quiz and one question in a quiz.
+- Links to quizzes where a user has participated.
+
+For authenticated users only:
+- Links to quizzes' results.
+- Links to quizzes the user has not taken yet.
