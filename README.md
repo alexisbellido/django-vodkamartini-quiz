@@ -1,4 +1,0 @@
-django-vodkamartini-quiz
-========================
-
-Quizzes
