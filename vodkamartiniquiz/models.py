@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils.timezone import now
 from django.db import models
 from django.contrib.auth.models import User
 from vodkamartiniarticle.models import BaseArticle
@@ -36,6 +38,19 @@ class Quiz(BaseArticle):
                 ('view_quiz', 'View quiz'),
                 ('take_quiz', 'Can take quiz'),
         )
+
+    def save(self, *args, **kwargs):
+        """
+        Set starts to today's date and ends 30 days in the future.
+        """
+        if not self.pk and not self.starts:
+            self.starts = now()
+
+        if not self.pk and not self.ends:
+            self.ends = now() + timedelta(days=30)
+
+	#import pdb; pdb.set_trace()
+        super(Quiz, self).save(*args, **kwargs)
 
 class Question(models.Model):
     weight = models.IntegerField(default=0)

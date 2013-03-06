@@ -4,6 +4,7 @@ On admin
 - link questions on quiz form to the corresponding question forms.
 - link questions on quiz form to question page on quiz
 - Add some quizzes, questions, answers and quiz results settings from admin and then write the tests for doing the same programatically. Verify changes break tests.
+- Automatically assign request.user to quiz.author when adding quiz on admin. In admin maybe save_module or use custom form.
 
 On public interface:
 - Write class based views for list of quizzes, quiz page, list of questions for one quiz and one question in a quiz.
