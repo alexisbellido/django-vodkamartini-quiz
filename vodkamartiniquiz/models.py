@@ -61,6 +61,10 @@ class Question(models.Model):
     def __unicode__(self):
         return "%s..." % (self.question[:50],)
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('vodkamartiniquiz_question_detail', (), {'pk': self.pk})
+
 class Answer(models.Model):
     letter = models.CharField(max_length=1)
     answer = models.TextField()

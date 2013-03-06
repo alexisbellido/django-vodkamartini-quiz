@@ -2,7 +2,6 @@ from django.contrib.admin import widgets
 from django import forms
 from vodkamartiniquiz.models import Quiz
 from django.contrib import admin
-from django.contrib.auth.models import User
 
 class QuizAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

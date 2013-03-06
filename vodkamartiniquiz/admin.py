@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.contrib.auth.models import User
 from vodkamartiniquiz.models import Quiz, Question, Answer, QuizResult
@@ -6,7 +7,13 @@ from vodkamartiniquiz.forms import QuizAdminForm
 
 class QuestionInline(admin.TabularInline):
     model = Question
-    fields = ('question', 'enabled', 'weight')
+    fields = ('question', 'edit', 'enabled', 'weight')
+    readonly_fields = ('edit',)
+
+    def edit(self, instance):
+        return '<a href="%s">%s</a>' % (reverse('admin:vodkamartiniquiz_question_change', args=(instance.id,)), 'Edit')
+
+    edit.allow_tags = True
 
 class QuizAdmin(admin.ModelAdmin):
     form = QuizAdminForm

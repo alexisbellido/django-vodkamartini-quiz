@@ -1,8 +1,7 @@
 TODO
 
 On admin
-- load current author_id from quiz instance when editing in admin
-- link questions on quiz form to the corresponding question forms.
+- link question change form back to quiz change form
 - link questions on quiz form to question page on quiz
 - Add some quizzes, questions, answers and quiz results settings from admin and then write the tests for doing the same programatically. Verify changes break tests.
 - Automatically assign request.user to quiz.author when adding quiz on admin. In admin maybe save_module or use custom form.

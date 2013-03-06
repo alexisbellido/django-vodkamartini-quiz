@@ -10,3 +10,7 @@ def quiz_index(request, page=1):
     # do something
     output = "A test for quiz app"
     return HttpResponse(output)
+
+def question_detail(request, pk):
+    output = "Question %s for quiz" % pk
+    return HttpResponse(output)
