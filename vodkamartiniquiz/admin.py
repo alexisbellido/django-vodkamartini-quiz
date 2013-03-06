@@ -1,4 +1,5 @@
 from django.contrib import admin
+#from django.core.exceptions import DoesNotExist 
 from vodkamartiniquiz.models import Quiz, Question, Answer, QuizResult
 from vodkamartiniquiz.forms import QuizAdminForm
 
@@ -19,15 +20,17 @@ class QuizAdmin(admin.ModelAdmin):
     inlines = [QuestionInline]
 
     def save_model(self, request, obj, form, change):
-        #print "change", change
-        #print "obj", obj
-        #print "request.user", request.user
-        print "before obj.author", obj.author
-        obj.author = request.user
-        print "after obj.author", obj.author
-        #if not obj.author:
-        #    obj.author = request.user
-        #print "obj.author", obj.author
+        print "all fields for object"
+        for field in obj._meta.fields:
+            print field.name
+
+        try:
+            if obj.author:
+                print "before obj.author", obj.author
+                pass
+        except:
+            obj.author = request.user
+            print "after obj.author", obj.author
         obj.save()
 
 class AnswerInline(admin.TabularInline):

@@ -1,6 +1,7 @@
 TODO
 
 On admin
+- load current author_id from quiz instance when editing in admin
 - link questions on quiz form to the corresponding question forms.
 - link questions on quiz form to question page on quiz
 - Add some quizzes, questions, answers and quiz results settings from admin and then write the tests for doing the same programatically. Verify changes break tests.

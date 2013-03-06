@@ -5,6 +5,12 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 
 class QuizAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # TODO how to get the instance data to autofill the author_id?
+        #print "test"
+        #print self.instance
+        super(QuizAdminForm, self).__init__(*args, **kwargs)
+
     author_id = forms.CharField(widget=widgets.ForeignKeyRawIdWidget(Quiz._meta.get_field('author').rel, admin.site),
                                 required=False,
                                 label="Author User Id",
@@ -16,10 +22,8 @@ class QuizAdminForm(forms.ModelForm):
 
     def save(self, commit=False):
         quiz = super(QuizAdminForm, self).save(commit=False)
-        #print "author_id", self.cleaned_data['author_id']
         try:
-            quiz.author = User.objects.filter(pk=self.cleaned_data['author_id'])
+            quiz.author = User.objects.get(pk=self.cleaned_data['author_id'])
         except (User.DoesNotExist, ValueError) as e:
-            #quiz.author = None
             pass
         return quiz
