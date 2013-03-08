@@ -1,5 +1,7 @@
 TODO
 
+- tests code for create a few quizzes with all their data in different scenarios, with letters, with points, etc
+
 On admin
 - Add some quizzes, questions, answers and quiz results settings from admin and then write the tests for doing the same programatically. Verify changes break tests.
 - select lists for choosing letter or points for quiz result, question
