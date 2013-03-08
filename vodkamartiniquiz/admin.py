@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from vodkamartiniquiz.models import Quiz, Question, Answer, QuizResult
 from vodkamartiniquiz.forms import QuizAdminForm
 
+class QuizResultInline(admin.TabularInline):
+    model = QuizResult
 
 class QuestionInline(admin.TabularInline):
     model = Question
@@ -21,7 +23,7 @@ class QuizAdmin(admin.ModelAdmin):
     search_fields = ['title']
     prepopulated_fields = {"slug": ("title", )}
     list_display = ('__unicode__', 'author', 'created', 'status')
-    inlines = [QuestionInline]
+    inlines = [QuestionInline, QuizResultInline]
 
     def save_model(self, request, obj, form, change):
         try:
@@ -36,11 +38,25 @@ class AnswerInline(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
+    list_display = ('__unicode__', 'quiz')
+    raw_id_fields = ('quiz',)
+
+    fields = ('question', ('quiz', 'editquiz'), 'enabled', 'weight')
+    readonly_fields = ('editquiz',)
+
+    def editquiz(self, instance):
+        return '<a href="%s">%s</a>' % (reverse('admin:vodkamartiniquiz_quiz_change', args=(instance.quiz.id,)), instance.quiz.title)
+
+    editquiz.allow_tags = True
+    editquiz.short_description = 'Edit quiz'
+
 
 #class AnswerAdmin(admin.ModelAdmin):
 #    pass
 
 class QuizResultAdmin(admin.ModelAdmin):
+    #fields = ('question', 'edit', 'enabled', 'weight')
+    list_display = ('__unicode__', 'quiz', 'letter', 'min_points', 'max_points')
     raw_id_fields = ('quiz',)
 
 #admin.site.register(Answer, AnswerAdmin)

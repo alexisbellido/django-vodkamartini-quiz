@@ -88,3 +88,9 @@ class QuizResult(models.Model):
     description = models.TextField()
     min_points = models.IntegerField(default=0)
     max_points = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ["-quiz", "letter", "max_points"]
+
+    def __unicode__(self):
+        return "%s: %s..." % (self.quiz.title, self.description[:40])
