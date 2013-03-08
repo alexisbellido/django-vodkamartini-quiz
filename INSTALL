@@ -1,0 +1,12 @@
+VodkaMartiniQuiz
+
+Install instructions
+
+- Install using pip from GitHub
+- Add vodkamartiniquiz to INSTALLED_APPS
+
+- Assign these permissions to editor group and any other groups that may need to make changes to quizzes:
+
+vodkarmartiniquiz | quiz | Can add quiz
+vodkarmartiniquiz | quiz | Can change quiz
+vodkarmartiniquiz | quiz | Can delete quiz
