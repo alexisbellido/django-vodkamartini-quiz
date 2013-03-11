@@ -1,14 +1,13 @@
-from django.core.cache import cache
 from django.test import TestCase
+from django.core.cache import cache
+from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from vodkamartinicategory.models import Category
 from vodkamartiniquiz.models import Quiz, Question, Answer, UserQuizAnswer, QuizResult
 
 """
 All tests here are related to the correct creation of objects for quizzes with
 different sets of data.
-
-TODO remove these comments:
-tests code to create a few quizzes with all their data in different scenarios, with letters, with points, etc
 """
 
 class BasicObjectsCreation(TestCase):
@@ -19,43 +18,40 @@ class BasicObjectsCreation(TestCase):
 
         cache.clear()
         self.editor = User.objects.create_user(username='mark_editor', password='secret')
-        #self.body = "This is quiz extra text"
 
-        #self.normal_title='Normal Question With Keyword In Title'
-        #self.normal_hidden_title='Normal Hidden Question'
-        #self.expert_title='Question With Expert Answer'
-
-        #self.quiz = Quiz(
-        #                         title=self.normal_title,
-        #                         body='This is a normal question, with no answers by experts', 
-        #                         author=author, 
-        #                         status=Question.LIVE_STATUS,
-        #                        )
-        #self.quiz.save()
-
-        #title = "First Live Quiz"
-        #status = Quiz.LIVE_STATUS
-        #teaser = "The quiz teaser"
-        #body = "The quiz body"
-        #self.quiz = Quiz(title=title, teaser=teaser, body=body, author=self.author, status=status)
-        #self.quiz.save()
+        self.title = 'A Quiz Title'
+        self.body = 'This is the body for the quiz test'
+        self.slug='the-quiz'
 
     def testCreateQuizLive(self):
         """
-        Verify creation is correct when providing all fields with LIVE_STATUS.
+        Verify quiz creation providing basic fields with LIVE_STATUS.
         """
-        one = 1
-        self.assertEqual(one, 1),
-#        title = "First Live Quiz"
-#        slug = "first-live-quiz"
-#        status = Quiz.LIVE_STATUS
-#        quiz = Quiz(title=title, teaser=self.teaser, body=self.body, slug=slug, author=self.author, status=status)
-#        quiz.save()
-#        c1 = Category.objects.create(title='Programming', slug='programming')
-#        c2 = Category.objects.create(title='Science', slug='science')
-#        quiz.categories.add(c1, c2)
-#        self.assertEqual(Quiz.objects.filter(status=Quiz.LIVE_STATUS).count(), 1)
-#        self.assertEqual(Quiz.objects.get(slug=slug).categories.count(), 2)
+
+        status = Quiz.LIVE_STATUS
+        quiz = Quiz(title=self.title, body=self.body, slug=self.slug, author=self.editor, status=status)
+        quiz.save()
+        self.assertEqual(Quiz.objects.filter(status=Quiz.LIVE_STATUS).count(), 1)
+        self.assertEqual(Quiz.objects.get(slug=self.slug).title, self.title)
+
+    def testCreateQuizLiveAutomaticSlug(self):
+        status = Quiz.LIVE_STATUS
+        quiz = Quiz(title=self.title, body=self.body, author=self.editor, status=status)
+        quiz.save()
+        self.assertEqual(Quiz.objects.get(title=self.title).title, self.title)
+        self.assertEqual(quiz.slug, slugify(self.title))
+
+    def testCreateQuizLiveWithCategories(self):
+        status = Quiz.LIVE_STATUS
+        quiz = Quiz(title=self.title, body=self.body, slug=self.slug, author=self.editor, status=status)
+        quiz.save()
+        c1 = Category.objects.create(title='Programming', slug='programming')
+        c2 = Category.objects.create(title='Science', slug='science')
+        quiz.categories.add(c1, c2)
+        categories = Quiz.objects.get(slug=self.slug).categories.all()
+        self.assertEqual(Quiz.objects.get(slug=self.slug).categories.count(), 2)
+        self.assertEqual(categories[0], c1)
+        self.assertEqual(categories[1], c2)
 #
 #    def testCreateQuizDraft(self):
 #        """
