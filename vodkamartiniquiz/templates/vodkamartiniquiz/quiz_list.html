@@ -16,4 +16,10 @@
 {% endif %}
 
 <h1>quiz home</h1>
+{% if slug %}
+    <h2>slug {{ slug }}</h2>
+{% endif %}
+{% for object in object_list %}
+    <p>{{ object }}</p>
+{% endfor %}
 {% endblock %}

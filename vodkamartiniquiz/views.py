@@ -1,10 +1,32 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render, render_to_response, get_object_or_404
-from django.views.generic import TemplateView
+#from django.views.generic import TemplateView
+from django.views.generic.base import View
 
-class QuizHome(TemplateView):
-    template_name = 'vodkamartiniquiz/quiz_list.html'
+class QuizHome(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 
+                      'vodkamartiniquiz/quiz_list.html',
+                      {
+                        'object_list': ['a', 'b', 'c'],
+                      },
+                      )
+
+class QuizDetail(View):
+    def get(self, request, *args, **kwargs):
+        print "kwargs", kwargs
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+
+        return render(request, 
+                      'vodkamartiniquiz/quiz_list.html',
+                      {
+                        'object_list': ['a', 'b', 'c'],
+                        'slug': slug,
+                      },
+                      )
+
 
 def quiz_index(request, page=1):
     """
