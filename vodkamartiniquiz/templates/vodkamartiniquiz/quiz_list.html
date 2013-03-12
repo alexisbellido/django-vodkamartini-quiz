@@ -19,6 +19,11 @@
 {% if slug %}
     <h2>slug {{ slug }}</h2>
 {% endif %}
+
+{% if greeting %}
+    <h2>greeting {{ greeting }}</h2>
+{% endif %}
+
 {% for object in object_list %}
     <p>{{ object }}</p>
 {% endfor %}

@@ -14,6 +14,8 @@ class QuizHome(View):
                       )
 
 class QuizDetail(View):
+    greeting = 'Hola'
+
     def get(self, request, *args, **kwargs):
         print "kwargs", kwargs
         if 'slug' in self.kwargs:
@@ -24,6 +26,7 @@ class QuizDetail(View):
                       {
                         'object_list': ['a', 'b', 'c'],
                         'slug': slug,
+                        'greeting': self.greeting,
                       },
                       )
 
