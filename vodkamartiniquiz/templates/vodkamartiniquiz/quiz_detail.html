@@ -2,7 +2,7 @@
 
 {% block title %}{{ block.super }}{% endblock %}
 
-{% block bodyclass %}{{ block.super }} quizzes-home{% endblock %}
+{% block bodyclass %}{{ block.super }} quiz-detail{% endblock %}
 
 {% block content %}
 {% load url from future %}
@@ -15,8 +15,11 @@
 </ul>
 {% endif %}
 
-{% for object in object_list %}
-    <p><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></p>
-{% endfor %}
+    <h1>title: {{ object.title }}</h1>
+    {% comment %}
+    <p>user: {{ request.user }}</p>
+    <p>email: {{ request.user.email }}</p>
+    {% endcomment %}
+    <p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
 
 {% endblock %}
