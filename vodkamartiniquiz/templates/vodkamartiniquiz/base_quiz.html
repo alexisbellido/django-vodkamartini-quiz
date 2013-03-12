@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %} {{ block.super }} | Quizzes{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    {% comment %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}vodkamartiniqa/css/main.css"/>
+    {% endcomment %}
+{% endblock %}
+
+{% block head_rss %}
+    {% load url from future %}
+    {% comment %}
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'vodkamartiniqa_feed_latest' %}">
+    {% endcomment %}
+{% endblock head_rss %}
+
+{% block bodyclass %}quizzes{% endblock %}
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+{% block footer_javascript_section %}
+    {% comment %}
+    <script src="{{ STATIC_URL }}vodkamartiniqa/js/main.js"></script>
+    {% endcomment %}
+{% endblock footer_javascript_section %}

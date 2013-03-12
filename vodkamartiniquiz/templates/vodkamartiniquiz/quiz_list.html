@@ -1,7 +1,19 @@
-{% extends "vodkamartinskeleton/base.html" %}
+{% extends "vodkamartiniquiz/base_quiz.html" %}
 
-{% block title %}list page{% endblock %}
+{% block title %}{{ block.super }}{% endblock %}
+
+{% block bodyclass %}{{ block.super }} quizzes-home{% endblock %}
 
 {% block content %}
-    <p>content here</p>
+{% load url from future %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h1>quiz home</h1>
 {% endblock %}
