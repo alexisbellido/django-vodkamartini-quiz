@@ -1,0 +1,26 @@
+{% extends "vodkamartiniquiz/base_quiz.html" %}
+
+{% block title %}{{ block.super }}{% endblock %}
+
+{% block bodyclass %}{{ block.super }} quiz-form{% endblock %}
+
+{% block content %}
+{% load url from future %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<form action="{% url 'vodkamartiniquiz_quiz_create' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Add" />
+</form>
+<p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
+
+{% endblock %}

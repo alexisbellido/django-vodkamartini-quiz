@@ -1,12 +1,15 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.views.generic.base import View
 from django.views.generic import ListView
-from vodkamartiniquiz.models import Quiz
+from .models import Quiz
+from .forms import QuizForm
 
 class QuizHome(ListView):
-    model = Quiz
+    #model = Quiz
+    queryset = Quiz.live.all()
 
     #def get_context_data(self, **kwargs):
     #    context = super(QuizHome, self).get_context_data(**kwargs)
@@ -30,3 +33,21 @@ class QuizBasicDetail(View):
                       },
                       )
 
+class QuizCreate(View):
+    form_class = QuizForm
+    #initial = {}
+    template_name = 'vodkamartiniquiz/quiz_form.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            # process form cleaned_data
+            quiz = form.save()
+            print quiz
+            #return HttpResponseRedirect(object.get_absolute_url())
+            return HttpResponseRedirect(reverse('vodkamartiniquiz_quiz_home'))
+        return render(request, self.template_name, {'form': form})

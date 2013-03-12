@@ -32,3 +32,30 @@ class QuizAdminForm(forms.ModelForm):
         """
         quiz = super(QuizAdminForm, self).save(commit=False)
         return quiz
+
+class QuizForm(forms.Form):
+    #def __init__(self, author, quiz_id=0, request=None, *args, **kwargs):
+    #    super(QuizForm, self).__init__(*args, **kwargs)
+    #    self.author = author
+    #    self.quiz_id = quiz_id
+    #    self.request = request
+
+    title = forms.CharField()
+    body = forms.CharField(widget=forms.Textarea, label='Enter a description for your quiz')
+
+    def save(self):
+        quiz = {'title': self.cleaned_data['title'], 'body': self.cleaned_data['body']}
+        return quiz
+
+    #def save(self):
+    #    if self.quiz_id:
+    #        """ existing quiz, no need to change author or status """
+    #        quiz = Quiz.objects.get(pk=self.quiz_id)
+    #        quiz.title = self.cleaned_data['title']
+    #        quiz.body = self.cleaned_data['body']
+    #    else:
+    #        quiz = Quiz(title=self.cleaned_data['title'], body=self.cleaned_data['body'], author=self.author, status=Quiz.LIVE_STATUS)
+
+    #    quiz.save()
+
+    #    return quiz
