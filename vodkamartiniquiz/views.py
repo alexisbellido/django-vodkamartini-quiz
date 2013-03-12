@@ -35,11 +35,11 @@ class QuizBasicDetail(View):
 
 class QuizCreate(View):
     form_class = QuizForm
-    #initial = {}
+    initial = {'title': 'Quiz X', 'body': 'This is all about X'}
     template_name = 'vodkamartiniquiz/quiz_form.html'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
+        form = self.form_class(initial=self.initial)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
