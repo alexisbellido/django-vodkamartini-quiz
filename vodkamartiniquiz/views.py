@@ -7,13 +7,11 @@ from vodkamartiniquiz.models import Quiz
 
 class QuizHome(ListView):
     model = Quiz
-    #def get(self, request, *args, **kwargs):
-    #    return render(request, 
-    #                  'vodkamartiniquiz/quiz_list.html',
-    #                  {
-    #                    'object_list': ['a', 'b', 'c'],
-    #                  },
-    #                  )
+
+    #def get_context_data(self, **kwargs):
+    #    context = super(QuizHome, self).get_context_data(**kwargs)
+    #    context['myvar'] = 'my variable goes here'
+    #    return context
 
 class QuizBasicDetail(View):
     greeting = 'Hola'
