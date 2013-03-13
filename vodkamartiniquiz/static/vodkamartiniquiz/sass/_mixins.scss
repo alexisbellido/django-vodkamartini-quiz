@@ -1,5 +1,13 @@
-@mixin pink_medium_text {
+@mixin pink_medium_text($size: $font_size_big) {
     font-family: $font_family_heading;
-    font-size: 18px;
+    font-size: $size;
     margin-bottom: $margin_vertical;
+}
+
+@mixin rounded_borders($radius: 5px) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    -o-border-radius: $radius;
+    border-radius: $radius;
 }

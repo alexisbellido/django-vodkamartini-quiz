@@ -1,25 +1,40 @@
 .quiz #content {
-  padding: 10px; }
+  padding: 10px;
+}
 
 .quiz-home h1 {
   font-size: 36px;
   color: #ae0d55;
   font-family: "Oswald", Arial, sans-serif;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+}
 .quiz-home #box {
   padding: 10px;
-  border: 1px solid #ae0d55; }
-  .quiz-home #box p {
-    border: 1px solid #4a4a4a;
-    font-size: 24px;
-    padding: 10px; }
-  .quiz-home #box div {
-    background-color: #f2f2f2;
-    border: 1px solid #bfbfbf;
-    padding: 10px; }
+}
+.quiz-home #box p {
+  border: 1px solid #4a4a4a;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 24px;
+  padding: 10px;
+}
+.quiz-home #box div {
+  background-color: #f2f2f2;
+  border: 1px solid #bfbfbf;
+  padding: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+}
 
 h2 {
   font-family: "Oswald", Arial, sans-serif;
-  font-size: 18px;
+  font-size: 24px;
   margin-bottom: 20px;
-  color: #db236d; }
+  color: #db236d;
+}

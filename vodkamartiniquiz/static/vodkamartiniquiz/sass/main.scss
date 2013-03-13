@@ -1,5 +1,6 @@
 @import "variables";
 @import "mixins";
+@import "compass/css3/border-radius";
 
 .quiz #content {
     padding: $padding_default;
@@ -15,9 +16,9 @@
 
     #box {
         padding: $padding_default;
-        border: 1px solid $color_primary;
         p {
             border: 1px solid $color_fg_1;
+            @include border-radius(5px);
             font-size: $font_size_big;
             padding: $padding_default;
         }
@@ -25,6 +26,7 @@
             background-color: $color_main_bg;
             border: 1px solid darken($color_main_bg, 20%);
             padding: $padding_default;
+            @include rounded_borders(10px);
         }
     }
 }
