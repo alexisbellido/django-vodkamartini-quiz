@@ -15,8 +15,15 @@
 </ul>
 {% endif %}
 
+<h1>Quizzes</h1>
+
 {% for object in object_list %}
     <p><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></p>
 {% endfor %}
+
+<div id="box">
+    <p>this is a paragraph inside the box</p>
+    <div>and this a div inside the box</div>
+</div>
 
 {% endblock content %}
