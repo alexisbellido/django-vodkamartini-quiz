@@ -1,13 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %} {{ block.super }} | Quizzes{% endblock %}
+{% block title %} {{ block.super }} | Quizzes{% endblock title %}
 
 {% block css %}
     {{ block.super }}
-    {% comment %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}vodkamartiniqa/css/main.css"/>
-    {% endcomment %}
-{% endblock %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}vodkamartiniquiz/css/main.css"/>
+{% endblock css %}
 
 {% block head_rss %}
     {% load url from future %}
@@ -16,7 +14,7 @@
     {% endcomment %}
 {% endblock head_rss %}
 
-{% block bodyclass %}quizzes{% endblock %}
+{% block bodyclass %}quiz{% endblock bodyclass %}
 
 {% block sidebar %}
 {% endblock sidebar %}

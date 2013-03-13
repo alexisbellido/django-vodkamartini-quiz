@@ -2,7 +2,7 @@
 
 {% block title %}{{ block.super }}{% endblock %}
 
-{% block bodyclass %}{{ block.super }} quizzes-home{% endblock %}
+{% block bodyclass %}{{ block.super }} quiz-home{% endblock %}
 
 {% block content %}
 {% load url from future %}
@@ -19,4 +19,4 @@
     <p><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></p>
 {% endfor %}
 
-{% endblock %}
+{% endblock content %}
