@@ -29,6 +29,13 @@
             @include rounded_borders(10px);
         }
     }
+
+    #box a {
+        color: blue;
+        &:hover {
+            color: green;
+        }
+    }
 }
 
 // Smartphones (portrait and landscape)
