@@ -32,9 +32,24 @@
   border-radius: 10px;
 }
 
-h2 {
-  font-family: "Oswald", Arial, sans-serif;
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #db236d;
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+  #branding .star,
+  #branding #head-promo,
+  #branding #tango-newsletter-form {
+    display: none;
+  }
+}
+@media only screen and (max-device-width: 720px) and (orientation: portrait) {
+  #branding .star,
+  #branding #head-promo,
+  #branding #tango-newsletter-form {
+    display: none;
+  }
+}
+@media only screen and (max-device-width: 1280px) and (orientation: landscape) {
+  #branding .star,
+  #branding #head-promo,
+  #branding #tango-newsletter-form {
+    display: none;
+  }
 }

@@ -31,7 +31,17 @@
     }
 }
 
-h2 {
-    @include pink_medium_text;
-    color: $color_secondary;
+// Smartphones (portrait and landscape)
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    @include hide_for_mobile;
+}
+
+// Galaxy S3 portrait
+@media only screen and (max-device-width: 720px) and (orientation:portrait) {
+    @include hide_for_mobile;
+}
+
+// Galaxy S3 landscape
+@media only screen and (max-device-width: 1280px) and (orientation:landscape) {
+    @include hide_for_mobile;
 }
