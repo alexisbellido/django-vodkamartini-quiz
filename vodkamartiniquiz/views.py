@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.template import RequestContext
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.views.generic.base import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormView
 from .models import Quiz
 from .forms import QuizForm
@@ -26,22 +26,34 @@ class QuizHome(ListView):
     #    context['myvar'] = 'my variable goes here'
     #    return context
 
-class QuizBasicDetail(View):
-    greeting = 'Hola'
+class QuizBasicDetail(DetailView):
+    #model = Quiz
+    queryset = Quiz.live.all()
 
-    def get(self, request, *args, **kwargs):
-        if 'slug' in self.kwargs:
-            slug = self.kwargs['slug']
-            object = Quiz.objects.get(slug=slug, status = Quiz.LIVE_STATUS)
+    #def get_object(self):
+    #    """
+    #    We could do something more with the object here
+    #    """
+    #    object = super(QuizBasicDetail, self).get_object()
+    #    return object
 
-        return render(request, 
-                      'vodkamartiniquiz/quiz_detail.html',
-                      {
-                        'object': object,
-                        'slug': slug,
-                        'greeting': self.greeting,
-                      },
-                      )
+
+#class QuizBasicDetail(View):
+#    greeting = 'Hola'
+#
+#    def get(self, request, *args, **kwargs):
+#        if 'slug' in self.kwargs:
+#            slug = self.kwargs['slug']
+#            object = Quiz.objects.get(slug=slug, status = Quiz.LIVE_STATUS)
+#
+#        return render(request, 
+#                      'vodkamartiniquiz/quiz_detail.html',
+#                      {
+#                        'object': object,
+#                        'slug': slug,
+#                        'greeting': self.greeting,
+#                      },
+#                      )
 
 #class QuizCreate(View):
 #    form_class = QuizForm
