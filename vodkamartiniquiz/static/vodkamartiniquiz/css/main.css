@@ -2,12 +2,14 @@
   padding: 10px;
 }
 
-.quiz-home h1 {
+.quiz-home h1,
+.quiz-detail h1 {
   font-size: 36px;
   color: #ae0d55;
   font-family: "Oswald", Arial, sans-serif;
   margin-bottom: 20px;
 }
+
 .quiz-home #box {
   padding: 10px;
 }

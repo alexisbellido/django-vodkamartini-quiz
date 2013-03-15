@@ -11,8 +11,15 @@ from .forms import QuizForm
 
 
 class QuizHome(ListView):
-    #model = Quiz
+    """
+    Show live quizzes. We can use either a model or a queryset attribute.
+    If provided, the value of queryset supersedes the value provided for model.
+    Using model = Quiz is just a shorthand for queryset = Quiz.objects.all()
+    In this case we want just live quizzes so we use that manager.
+    """
+
     queryset = Quiz.live.all()
+    paginate_by = 2
 
     #def get_context_data(self, **kwargs):
     #    context = super(QuizHome, self).get_context_data(**kwargs)

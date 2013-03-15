@@ -17,14 +17,46 @@
 
 <h1>Quizzes</h1>
 
-{% for object in object_list %}
-    <p><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></p>
+{% for quiz in quiz_list %}
+    <article>
+        <h2><a href="{{ quiz.get_absolute_url }}">{{ quiz.title }}</a></h2>
+        {% if quiz.teaser_html %}
+            {{ quiz.teaser_html|safe }}
+        {% else %}
+            {{ quiz.body_html|truncatewords_html:"50"|safe }}
+        {% endif %}
+        {% if quiz.image %}
+            <p><img src="{{ quiz.image.url }}" alt="" /></p>
+        {% endif %}
+    </article>
 {% endfor %}
 
+{% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            {% if page_obj.previous_page_number == 1 %}
+                <a href="{% url 'vodkamartiniquiz_quiz_home' %}">previous</a>
+            {% else %}
+                <a href="{% url 'vodkamartiniquiz_quiz_home' %}?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+        {% endif %}
+    
+        <span class="current">
+            Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a href="{% url 'vodkamartiniquiz_quiz_home' %}?page={{ page_obj.next_page_number }}">next</a>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% comment %}
 <div id="box">
     <h2>A subheading</h2>
     <p>this is a paragraph inside the box with a <a href="#">link</a> on it.</p>
     <div>and this a div inside the box</div>
 </div>
+{% endcomment %}
 
 {% endblock content %}
