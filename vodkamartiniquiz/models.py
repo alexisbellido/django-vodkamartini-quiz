@@ -39,9 +39,9 @@ class Quiz(BaseArticle):
                 ('take_quiz', 'Can take quiz'),
         )
 
-    def getQuestionId(self, order):
-        questions = self.question_set.filter(enabled=True).order_by('weight')
-        return questions[order].id
+    def getFirstQuestionId(self):
+        first_question_id = self.question_set.filter(enabled=True).order_by('weight', 'pk')[0].id
+        return first_question_id
 
     def save(self, *args, **kwargs):
         """
@@ -56,6 +56,7 @@ class Quiz(BaseArticle):
 	#import pdb; pdb.set_trace()
         super(Quiz, self).save(*args, **kwargs)
 
+
 class Question(models.Model):
     weight = models.IntegerField(default=0)
     question = models.TextField()
@@ -68,6 +69,14 @@ class Question(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('vodkamartiniquiz_question_detail', (), {'pk': self.pk})
+
+    def getNextQuestionId(self):
+        """
+        Get the next question for the quiz that this question belongs to.
+        """
+        next_question_id = self.quiz.question_set.filter(enabled=True, weight__gte=self.weight).exclude(pk=self.pk).order_by('weight', 'pk')[0]
+        return next_question_id
+
 
 class Answer(models.Model):
     letter = models.CharField(max_length=1)

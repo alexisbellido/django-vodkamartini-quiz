@@ -37,7 +37,7 @@ class QuizDetail(DetailView):
         context = super(QuizDetail, self).get_context_data(**kwargs)
         #context['question_list'] = self.object.question_set.filter(enabled=True).order_by('weight')
         if self.request.user.is_authenticated():
-            context['first_question_id'] = self.object.getQuestionId(0)
+            context['first_question_id'] = self.object.getFirstQuestionId()
         return context
 
     #def get_object(self):
@@ -65,8 +65,11 @@ class QuestionDetail(FormView, SingleObjectMixin):
         """
         context = super(QuestionDetail, self).get_context_data(**kwargs)
         context['object'] = self.get_object()
-        context['pk'] = context['object'].pk
         context['quiz_slug'] = context['object'].quiz.slug
+        # TODO get this question order to get the next one and that should be used as pk for building url action in form
+        #context['first_question_id'] = self.object.getQuestionId(0)
+        context['pk'] = context['object'].pk
+        context['next_question_id'] = context['object'].getNextQuestionId()
         return context
 
 
