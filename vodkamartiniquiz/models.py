@@ -40,7 +40,7 @@ class Quiz(BaseArticle):
         )
 
     def getFirstQuestionId(self):
-        first_question_id = self.question_set.filter(enabled=True).order_by('weight', 'pk')[0].id
+        first_question_id = self.question_set.filter(enabled=True).order_by('weight', 'pk')[0].pk
         return first_question_id
 
     def save(self, *args, **kwargs):
@@ -70,12 +70,17 @@ class Question(models.Model):
     def get_absolute_url(self):
         return ('vodkamartiniquiz_question_detail', (), {'pk': self.pk})
 
-    def getNextQuestionId(self):
+    def getQuestionsPkList(self):
         """
-        Get the next question for the quiz that this question belongs to.
+        Gets a list of questions' pk ordered by weight and pk.
+        This list will be used by getQuestionNextPk and getQuestionPreviousPk in vodkamartiniquiz.views
+        and requires just one extra database query.
         """
-        next_question_id = self.quiz.question_set.filter(enabled=True, weight__gte=self.weight).exclude(pk=self.pk).order_by('weight', 'pk')[0]
-        return next_question_id
+        question_list = self.quiz.question_set.filter(enabled=True).order_by('weight', 'pk')
+        pk_list = []
+        for question in question_list:
+            pk_list.append(question.pk)
+        return pk_list
 
 
 class Answer(models.Model):
@@ -85,7 +90,7 @@ class Answer(models.Model):
     points = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return "%s..." % (self.answer[:50],)
+        return "%s. %s" % (self.letter.upper(), self.answer)
 
 class UserQuizAnswer(models.Model):
     user = models.ForeignKey(User)

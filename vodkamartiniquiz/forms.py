@@ -1,6 +1,6 @@
 from django.contrib.admin import widgets
 from django import forms
-from vodkamartiniquiz.models import Quiz
+from vodkamartiniquiz.models import Quiz, Question, Answer
 from django.contrib import admin
 
 class QuizAdminForm(forms.ModelForm):
@@ -63,17 +63,22 @@ class QuizForm(forms.Form):
 
 class QuestionForm(forms.Form):
 
-    #def __init__(self, author, question_id=0, request=None, *args, **kwargs):
-    #    super(QuestionForm, self).__init__(*args, **kwargs)
-    #    self.author = author
-    #    self.question_id = question_id
-    #    self.request = request
+    answer = forms.ModelChoiceField(queryset=Answer.objects.none(), widget=forms.RadioSelect, empty_label=None, label='What would be your answer?')
 
-    title = forms.CharField()
-    body = forms.CharField(widget=forms.Textarea, label='Enter a description for your question')
+    def __init__(self, *args, **kwargs):
+        """
+        ##Fill author_id with author's id obtained from instance.
+        Notice how we need to call __init__ from superclass first, if we don't do this
+        then we won't be able to access attributes such as fields and instance.
+        """
+        super(QuestionForm, self).__init__(*args, **kwargs)
+        if self.initial:
+            self.question = self.initial['question']
+            self.fields['answer'].queryset = self.question.answer_set.all().order_by('letter')
 
     def save(self):
-        question = {'title': self.cleaned_data['title'], 'body': self.cleaned_data['body']}
+        question = {'answer': self.cleaned_data['answer']}
+        #print question
         return question
 
     #def save(self):

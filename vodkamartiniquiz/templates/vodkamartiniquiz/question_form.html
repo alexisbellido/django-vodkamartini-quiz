@@ -15,13 +15,41 @@
 </ul>
 {% endif %}
 
-<h1>URL: {% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=pk %}</h1>
+<article>
+    <h1>{{ object.quiz.title }}</h1>
+    <h2>{{ object.question }}</h2>
+    <p>This is question {{ num_current_question }} from a total of {{ num_questions }} questions in this quiz.</p>
+</article>
 
 <form action="{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=pk %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Add" />
+
+    {% if previous_question_id %}
+        <input type="submit" name="previous_question" value="Previous Question" />
+    {% endif %}
+
+    {% if next_question_id %}
+        <input type="submit" name="next_question" value="Next Question" />
+    {% else %}
+        <input type="submit" name="next_question" value="Submit Last Question" />
+    {% endif %}
 </form>
+
+<hr />
+
+<p>This quiz URL: <a href="{{ object.quiz.get_absolute_url }}">{{ object.quiz.get_absolute_url }}</a></p>
+
+<p>This question URL: {% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=pk %}</p>
+
+{% if previous_question_id %}
+    <p>Previous question URL: <a href="{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=previous_question_id %}">{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=previous_question_id %}</a></p>
+{% endif %}
+
+{% if next_question_id %}
+    <p>Next question URL: <a href="{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=next_question_id %}">{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=next_question_id %}</a></p>
+{% endif %}
+
 <p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
 
 {% endblock %}

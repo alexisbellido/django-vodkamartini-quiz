@@ -58,20 +58,51 @@ class QuestionDetail(FormView, SingleObjectMixin):
     template_name = 'vodkamartiniquiz/question_form.html'
     queryset = Question.objects.filter(enabled=True)
 
+    def get_initial(self):
+        return {'question': self.get_object()}
+
+    #def get(self, request, *args, **kwargs):
+    #    self.object = self.get_object()
+    #    print self.object
+    #    response = super(QuestionDetail, self).get(request, *args, **kwargs)
+    #    return response
+
     def get_context_data(self, **kwargs):
         """
-        Get the enabled questions order by weight for this quiz.
-        TODO: get just the first question to start taking the quiz but only if user is authenticated, then the form comes.
+        Get the next enabled question for the quiz this question belongs to.
         """
         context = super(QuestionDetail, self).get_context_data(**kwargs)
         context['object'] = self.get_object()
         context['quiz_slug'] = context['object'].quiz.slug
-        # TODO get this question order to get the next one and that should be used as pk for building url action in form
-        #context['first_question_id'] = self.object.getQuestionId(0)
-        context['pk'] = context['object'].pk
-        context['next_question_id'] = context['object'].getNextQuestionId()
+        self.pk = context['object'].pk
+        context['pk'] = self.pk
+        self.question_pk_list = context['object'].getQuestionsPkList()
+        context['question_pk_list'] = self.question_pk_list
+        context['num_questions'] = len(self.question_pk_list)
+        context['num_current_question'] = self.question_pk_list.index(self.pk) + 1
+        context['next_question_id'] = self.getQuestionNextPk()
+        context['previous_question_id'] = self.getQuestionPreviousPk()
         return context
 
+    def getQuestionNextPk(self):
+        pk_list = self.question_pk_list
+        index = pk_list.index(self.pk)
+        try:
+            next_pk =  pk_list[index + 1]
+        except IndexError:
+            next_pk = None
+
+        return next_pk
+
+    def getQuestionPreviousPk(self):
+        pk_list = self.question_pk_list
+        index = pk_list.index(self.pk)
+        if index > 0:
+            previous_pk =  pk_list[index - 1]
+        else:
+            previous_pk = None
+
+        return previous_pk
 
 
 #class QuizDetail(View):

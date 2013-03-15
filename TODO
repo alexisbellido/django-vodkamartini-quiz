@@ -1,5 +1,7 @@
 TODO
 
+- check to only allow authenticated to take quiz, send to login/register if not
+
 - tests code for create a few quizzes with all their data in different scenarios, with letters, with points, etc
 
 On admin

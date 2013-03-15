@@ -29,7 +29,7 @@
     {% endfor %}
 
     {% if first_question_id %}
-        <p>First question id: {{ first_question_id }}
+        <p>First question URL: {% url 'vodkamartiniquiz_question_detail' slug=quiz.slug pk=first_question_id %}</p>
         <p><a href="{% url 'vodkamartiniquiz_question_detail' slug=quiz.slug pk=first_question_id %}">Take the quiz</a></p>
     {% endif %}
 
