@@ -18,9 +18,7 @@
 <article>
     <h1>{{ quiz.title }}</h1>
     <p>Published on {{ quiz.created|date:"F j, Y" }}</p>
-    <p>Author: <strong>{{ quiz.author.id }} {{ quiz.author.username }}</strong></p>
 
-    <h2>Complete body</h2>
     {{ quiz.body_html|safe }}
     {% if quiz.image %}
         <p><img src="{{ quiz.image.url }}" alt="" /></p>
@@ -30,18 +28,17 @@
         <p>Question: {{ question.pk }}: {{ question.question }}</p>
     {% endfor %}
 
-    {% if user.is_authenticated %}
-        <p>Authenticated user here</p>
-    {% else  %}
-        <p>Not authenticated user.</p>
+    {% if first_question_id %}
+        <p>First question id: {{ first_question_id }}
+        <p><a href="{% url 'vodkamartiniquiz_question_detail' slug=quiz.slug pk=first_question_id %}">Take the quiz</a></p>
     {% endif %}
+
+    {% comment %}
+    <p>Author: <strong>{{ quiz.author.id }} {{ quiz.author.username }}</strong></p>
+    {% endcomment %}
 
 </article>
 
-    {% comment %}
-    <p>user: {{ request.user }}</p>
-    <p>email: {{ request.user.email }}</p>
-    {% endcomment %}
-    <p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
+<p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
 
 {% endblock content %}

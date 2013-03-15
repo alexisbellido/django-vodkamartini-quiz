@@ -2,7 +2,7 @@
 
 {% block title %}{{ block.super }}{% endblock %}
 
-{% block bodyclass %}{{ block.super }} quiz-form{% endblock %}
+{% block bodyclass %}{{ block.super }} quiz-question-form{% endblock %}
 
 {% block content %}
 {% load url from future %}
@@ -15,7 +15,9 @@
 </ul>
 {% endif %}
 
-<form action="{% url 'vodkamartiniquiz_quiz_create' %}" method="post">
+<h1>URL: {% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=pk %}</h1>
+
+<form action="{% url 'vodkamartiniquiz_question_detail' slug=quiz_slug pk=pk %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Add" />

@@ -60,3 +60,31 @@ class QuizForm(forms.Form):
     #    quiz.save()
 
     #    return quiz
+
+class QuestionForm(forms.Form):
+
+    #def __init__(self, author, question_id=0, request=None, *args, **kwargs):
+    #    super(QuestionForm, self).__init__(*args, **kwargs)
+    #    self.author = author
+    #    self.question_id = question_id
+    #    self.request = request
+
+    title = forms.CharField()
+    body = forms.CharField(widget=forms.Textarea, label='Enter a description for your question')
+
+    def save(self):
+        question = {'title': self.cleaned_data['title'], 'body': self.cleaned_data['body']}
+        return question
+
+    #def save(self):
+    #    if self.question_id:
+    #        """ existing question, no need to change author or status """
+    #        question = Question.objects.get(pk=self.question_id)
+    #        question.title = self.cleaned_data['title']
+    #        question.body = self.cleaned_data['body']
+    #    else:
+    #        question = Question(title=self.cleaned_data['title'], body=self.cleaned_data['body'], author=self.author, status=Question.LIVE_STATUS)
+
+    #    question.save()
+
+    #    return question

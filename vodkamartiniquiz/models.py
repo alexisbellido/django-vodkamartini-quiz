@@ -39,6 +39,10 @@ class Quiz(BaseArticle):
                 ('take_quiz', 'Can take quiz'),
         )
 
+    def getQuestionId(self, order):
+        questions = self.question_set.filter(enabled=True).order_by('weight')
+        return questions[order].id
+
     def save(self, *args, **kwargs):
         """
         Set starts to today's date and ends 30 days in the future.
