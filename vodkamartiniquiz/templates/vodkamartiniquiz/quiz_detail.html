@@ -26,6 +26,10 @@
         <p><img src="{{ quiz.image.url }}" alt="" /></p>
     {% endif %}
 
+    {% for question in question_list %}
+        <p>Question: {{ question.pk }}: {{ question.question }}</p>
+    {% endfor %}
+
     {% if user.is_authenticated %}
         <p>Authenticated user here</p>
     {% else  %}

@@ -21,14 +21,21 @@ class QuizHome(ListView):
     queryset = Quiz.live.all()
     paginate_by = 2
 
-    #def get_context_data(self, **kwargs):
-    #    context = super(QuizHome, self).get_context_data(**kwargs)
-    #    context['myvar'] = 'my variable goes here'
-    #    return context
-
 class QuizBasicDetail(DetailView):
-    #model = Quiz
+    """
+    Show details for one quiz. As in QuizHome, we can use either model or queryset here.
+    We chose queryset to make sure we only show live quizzes.
+    """
     queryset = Quiz.live.all()
+
+    def get_context_data(self, **kwargs):
+        """
+        Get the enabled questions order by weight for this quiz.
+        TODO: get just the first question to start taking the quiz but only if user is authenticated, then the form comes.
+        """
+        context = super(QuizBasicDetail, self).get_context_data(**kwargs)
+        context['question_list'] = self.object.question_set.filter(enabled=True).order_by('weight')
+        return context
 
     #def get_object(self):
     #    """
