@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse_lazy
 from django.template import RequestContext
@@ -51,15 +52,15 @@ class QuestionDetail(FormView, SingleObjectMixin):
     """
     This should be a FormView actually, to show the question and radio buttons with possible answers.
     It should include the pk for the next question in this quiz.
+    TODO This view should be just for authenticated users. Use django-braces mixin here.
     """
 
     form_class = QuestionForm
-    initial = {'title': 'This is question', 'body': 'Question is'}
     template_name = 'vodkamartiniquiz/question_form.html'
     queryset = Question.objects.filter(enabled=True)
 
     def get_initial(self):
-        return {'question': self.get_object()}
+        return {'question': self.get_object(), 'user': self.request.user}
 
     #def get_success_url(self):
     #    return '/questions'
@@ -70,11 +71,21 @@ class QuestionDetail(FormView, SingleObjectMixin):
     #    response = super(QuestionDetail, self).get(request, *args, **kwargs)
     #    return response
 
+    #def get_form(self, form):
+    #    pass
+
     def form_valid(self, form):
-        #form.send_email()
+        # TODO form.save() should return something to be used later in this method
+        # and that something will indicate where to redirect next
+        form.save()
         # TODO, change success_url to move to next question or to results
-        self.success_url = '/quiz'
+        self.success_url = '/quiz/quiz-2/question/41/'
+        messages.info(self.request, 'Question answered.')
         return super(QuestionDetail, self).form_valid(form)
+
+    #def form_invalid(self, form):
+    #    messages.info(self.request, 'Submission problem, please try again.')
+    #    return super(QuestionDetail, self).form_invalid(form)
 
     def get_context_data(self, **kwargs):
         """

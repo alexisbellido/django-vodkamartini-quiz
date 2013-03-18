@@ -74,11 +74,19 @@ class QuestionForm(forms.Form):
         super(QuestionForm, self).__init__(*args, **kwargs)
         if self.initial:
             self.question = self.initial['question']
+            self.user = self.initial['user']
             self.fields['answer'].queryset = self.question.answer_set.all().order_by('letter')
 
     def save(self):
         question = {'answer': self.cleaned_data['answer']}
-        #print question
+        print "user is", self.user
+        print "email is", self.user.email
+        # TODO save result in this model and then return something to move to 
+        # either the next question or display results for the quiz for this user
+        #class UserQuizAnswer(models.Model):
+        #    user = models.ForeignKey(User)
+        #    quiz = models.ForeignKey(Quiz)
+        #    answer = models.ForeignKey(Answer)
         return question
 
     #def save(self):
