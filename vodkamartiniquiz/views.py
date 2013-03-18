@@ -7,6 +7,7 @@ from django.shortcuts import render, render_to_response, get_object_or_404
 from django.views.generic.base import View
 from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
+from braces.views import LoginRequiredMixin
 
 from .models import Quiz, Question
 from .forms import QuizForm, QuestionForm
