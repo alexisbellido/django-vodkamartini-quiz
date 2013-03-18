@@ -49,7 +49,7 @@ class QuizDetail(DetailView):
     #    object = super(QuizDetail, self).get_object()
     #    return object
 
-class QuestionDetail(FormView, SingleObjectMixin):
+class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
     """
     This should be a FormView actually, to show the question and radio buttons with possible answers.
     It should include the pk for the next question in this quiz.
