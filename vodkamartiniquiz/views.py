@@ -61,11 +61,20 @@ class QuestionDetail(FormView, SingleObjectMixin):
     def get_initial(self):
         return {'question': self.get_object()}
 
+    #def get_success_url(self):
+    #    return '/questions'
+
     #def get(self, request, *args, **kwargs):
     #    self.object = self.get_object()
     #    print self.object
     #    response = super(QuestionDetail, self).get(request, *args, **kwargs)
     #    return response
+
+    def form_valid(self, form):
+        #form.send_email()
+        # TODO, change success_url to move to next question or to results
+        self.success_url = '/quiz'
+        return super(QuestionDetail, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         """
