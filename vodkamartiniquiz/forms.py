@@ -1,7 +1,8 @@
 from django.contrib.admin import widgets
 from django import forms
-from vodkamartiniquiz.models import Quiz, Question, Answer
 from django.contrib import admin
+from django.core.urlresolvers import reverse
+from vodkamartiniquiz.models import Quiz, Question, Answer, UserQuizAnswer
 
 class QuizAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -74,26 +75,24 @@ class QuestionForm(forms.Form):
         if self.initial:
             self.question = self.initial['question']
             self.user = self.initial['user']
+            self.next_question_id = self.initial['next_question_id']
             self.fields['answer'].queryset = self.question.answer_set.all().order_by('letter')
 
     def save(self):
-        # TODO we have self.question, use it to find next question, or if it's the last one
-        # we have self.user, use it to create UserQuizAnswer instance
-        #question = {'answer': self.cleaned_data['answer']}
-        print "user is", self.user
-        print "email is", self.user.email
-        # TODO let's return a result that includes the next question id to redirect,
-        # and if this is the last question in this quiz, the quiz id to return the result
-        # if this was the last question then we need to go to something like a /quiz/slug/result URL generated from other view
-        return = {}
-        # TODO Fill author_id with author's id obtained from instance.
-        # TODO save result in this model and then return something to move to 
-        # either the next question or display results for the quiz for this user
-        #class UserQuizAnswer(models.Model):
-        #    user = models.ForeignKey(User)
-        #    quiz = models.ForeignKey(Quiz)
-        #    answer = models.ForeignKey(Answer)
-        return result
+        #print "quiz", self.question.quiz
+        #print "question", self.question
+        #print "answer", self.cleaned_data['answer']
+        #print "user is", self.user
+        #print "next_question_id", self.next_question_id
+        #userquizanswer = UserQuizAnswer(user=self.user, quiz=self.question.quiz, answer=self.cleaned_data['answer'])
+        #userquizanswer.save()
+        if self.next_question_id:
+            success_url = reverse('vodkamartiniquiz_question_detail', kwargs={'slug': self.question.quiz.slug, 'pk': self.next_question_id})
+        else:
+            success_url = reverse('vodkamartiniquiz_quiz_home')
+            # TODO if this was the last question then we need to go to something like a /quiz/slug/result URL generated from other view
+        print "success_url in form.save", success_url
+        return success_url
 
     #def save(self):
     #    if self.question_id:

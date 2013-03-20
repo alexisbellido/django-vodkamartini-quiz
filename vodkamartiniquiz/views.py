@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from braces.views import LoginRequiredMixin
 
-from .models import Quiz, Question
+from .models import Quiz, Question, QuizResult
 from .forms import QuizForm, QuestionForm
 
 
@@ -53,7 +53,6 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
     """
     This should be a FormView actually, to show the question and radio buttons with possible answers.
     It should include the pk for the next question in this quiz.
-    TODO This view should be just for authenticated users. Use django-braces mixin here.
     """
 
     form_class = QuestionForm
@@ -61,7 +60,20 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
     queryset = Question.objects.filter(enabled=True)
 
     def get_initial(self):
-        return {'question': self.get_object(), 'user': self.request.user}
+        self.object = self.get_object()
+        self.pk = self.object.pk
+        self.question_pk_list = self.object.getQuestionsPkList()
+        self.num_questions = len(self.question_pk_list)
+        self.num_current_question = self.question_pk_list.index(self.pk) + 1
+        self.next_question_id = self.getQuestionNextPk()
+        self.previous_question_id = self.getQuestionPreviousPk()
+        return {'question': self.object, 
+                'user': self.request.user,
+                'num_questions': self.num_questions,
+                'num_current_question': self.num_current_question,
+                'next_question_id': self.next_question_id,
+                'previous_question_id': self.previous_question_id,
+               }
 
     #def get_success_url(self):
     #    return '/some-url/'
@@ -76,11 +88,7 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
     #    pass
 
     def form_valid(self, form):
-        # TODO form.save() should return something to be used later in this method
-        # and that something will indicate where to redirect next
-        result = form.save()
-        # TODO, change success_url to move to next question or to results
-        self.success_url = '/quiz/quiz-2/question/41/'
+        self.success_url = form.save()
         messages.info(self.request, 'Question answered.')
         return super(QuestionDetail, self).form_valid(form)
 
@@ -90,19 +98,17 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
 
     def get_context_data(self, **kwargs):
         """
-        Get the next enabled question for the quiz this question belongs to.
+        Populate the context. Most of these details are initialized on self.get_initial
         """
         context = super(QuestionDetail, self).get_context_data(**kwargs)
-        context['object'] = self.get_object()
-        context['quiz_slug'] = context['object'].quiz.slug
-        self.pk = context['object'].pk
+        context['object'] = self.object
+        context['quiz_slug'] = self.object.quiz.slug
         context['pk'] = self.pk
-        self.question_pk_list = context['object'].getQuestionsPkList()
         context['question_pk_list'] = self.question_pk_list
-        context['num_questions'] = len(self.question_pk_list)
-        context['num_current_question'] = self.question_pk_list.index(self.pk) + 1
-        context['next_question_id'] = self.getQuestionNextPk()
-        context['previous_question_id'] = self.getQuestionPreviousPk()
+        context['num_questions'] = self.num_questions
+        context['num_current_question'] = self.num_current_question
+        context['next_question_id'] = self.next_question_id
+        context['previous_question_id'] = self.previous_question_id
         return context
 
     def getQuestionNextPk(self):
@@ -125,6 +131,13 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
 
         return previous_pk
 
+class QuizResult(DetailView):
+    """
+    Show result for quiz for currently logged in user
+    """
+    model = QuizResult
+    #pass
+    #return HttpResponse('text result')
 
 #class QuizDetail(View):
 #    greeting = 'Hola'
