@@ -79,19 +79,12 @@ class QuestionForm(forms.Form):
             self.fields['answer'].queryset = self.question.answer_set.all().order_by('letter')
 
     def save(self):
-        #print "quiz", self.question.quiz
-        #print "question", self.question
-        #print "answer", self.cleaned_data['answer']
-        #print "user is", self.user
-        #print "next_question_id", self.next_question_id
-        #userquizanswer = UserQuizAnswer(user=self.user, quiz=self.question.quiz, answer=self.cleaned_data['answer'])
-        #userquizanswer.save()
+        userquizanswer = UserQuizAnswer(user=self.user, quiz=self.question.quiz, answer=self.cleaned_data['answer'])
+        userquizanswer.save()
         if self.next_question_id:
             success_url = reverse('vodkamartiniquiz_question_detail', kwargs={'slug': self.question.quiz.slug, 'pk': self.next_question_id})
         else:
-            success_url = reverse('vodkamartiniquiz_quiz_home')
-            # TODO if this was the last question then we need to go to something like a /quiz/slug/result URL generated from other view
-        print "success_url in form.save", success_url
+            success_url = reverse('vodkamartiniquiz_quizresult_detail', kwargs={'slug': self.question.quiz.slug})
         return success_url
 
     #def save(self):

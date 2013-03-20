@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from braces.views import LoginRequiredMixin
 
-from .models import Quiz, Question, QuizResult
+from .models import Quiz, Question, QuizResult, UserQuizAnswer
 from .forms import QuizForm, QuestionForm
 
 
@@ -24,7 +24,7 @@ class QuizHome(ListView):
     queryset = Quiz.live.all()
     paginate_by = 2
 
-class QuizDetail(DetailView):
+class QuizDetail(LoginRequiredMixin, DetailView):
     """
     Show details for one quiz. As in QuizHome, we can use either model or queryset here.
     We chose queryset to make sure we only show live quizzes.
@@ -88,8 +88,8 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
     #    pass
 
     def form_valid(self, form):
+        #messages.info(self.request, 'Question answered.')
         self.success_url = form.save()
-        messages.info(self.request, 'Question answered.')
         return super(QuestionDetail, self).form_valid(form)
 
     #def form_invalid(self, form):
@@ -131,13 +131,34 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
 
         return previous_pk
 
-class QuizResult(DetailView):
+class QuizResultDetail(DetailView):
     """
     Show result for quiz for currently logged in user
     """
-    model = QuizResult
-    #pass
-    #return HttpResponse('text result')
+    model = Quiz
+    template_name = 'vodkamartiniquiz/quizresult_detail.html'
+    #url(r'^(?P<slug>[-\w]+)/result/$', QuizResult.as_view(), name='vodkamartiniquiz_quizresult_detail'),
+
+    def get_context_data(self, **kwargs):
+        """
+        Populate the context to add quiz result data.
+        """
+        if self.request.user.is_authenticated():
+            userquizresult = QuizResult.objects.userquizresult(quiz=self.object, user=self.request.user)
+        else:
+            pass
+        context = super(QuizResultDetail, self).get_context_data(**kwargs)
+        context['quizresult'] = {'key': 'this is a value'}
+        #context['object'] = self.object
+        #context['quiz_slug'] = self.object.quiz.slug
+        #context['pk'] = self.pk
+        #context['question_pk_list'] = self.question_pk_list
+        #context['num_questions'] = self.num_questions
+        #context['num_current_question'] = self.num_current_question
+        #context['next_question_id'] = self.next_question_id
+        #context['previous_question_id'] = self.previous_question_id
+        return context
+
 
 #class QuizDetail(View):
 #    greeting = 'Hola'

@@ -92,10 +92,52 @@ class Answer(models.Model):
     def __unicode__(self):
         return "%s. %s" % (self.letter.upper(), self.answer)
 
+class UserQuizAnswerManager(models.Manager):
+    """
+    Manager with additional methods.
+    """
+
+    def userquizanswers(self, quiz, user):
+        """
+        Returns all answers for a specific user and quiz.
+        The letter most often used for answers for quizzes with letters scoring or
+        the total points for quizzes using points scoring.
+        """
+
+        userquizanswers = self.model.objects.filter(quiz=quiz, user=user)
+        return userquizanswers
+
 class UserQuizAnswer(models.Model):
     user = models.ForeignKey(User)
     quiz = models.ForeignKey(Quiz)
     answer = models.ForeignKey(Answer)
+    objects = UserQuizAnswerManager()
+
+class QuizResultManager(models.Manager):
+    """
+    Manager with additional methods.
+    """
+
+    def userquizresult(self, quiz, user):
+        """
+        Returns result for a specific user and quiz.
+        The letter most often used for answers for quizzes with letters scoring or
+        the total points for quizzes using points scoring.
+        """
+
+        userquizanswers = UserQuizAnswer.objects.userquizanswers(quiz, user)
+        print "userquizanswers from the manager method"
+        print userquizanswers
+        for x in userquizanswers:
+            print x.answer
+        if quiz.scoring == Quiz.LETTERS_SCORING:
+            print "letters scoring"
+            quizresult = None
+        if quiz.scoring == Quiz.POINTS_SCORING:
+            # TODO when we activate points scoring
+            quizresult = None
+        quizresult = None
+        return quizresult
 
 class QuizResult(models.Model):
     """
@@ -106,6 +148,7 @@ class QuizResult(models.Model):
     description = models.TextField()
     min_points = models.IntegerField(default=0)
     max_points = models.IntegerField(default=0)
+    objects = QuizResultManager()
 
     class Meta:
         ordering = ["-quiz", "letter", "max_points"]

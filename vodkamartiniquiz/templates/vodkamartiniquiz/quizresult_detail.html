@@ -1,0 +1,36 @@
+{% extends "vodkamartiniquiz/base_quiz.html" %}
+
+{% block title %}{{ block.super }}{% endblock %}
+
+{% block bodyclass %}{{ block.super }} quiz-result{% endblock %}
+
+{% block content %}
+{% load url from future %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<article>
+    <h1>Results for {{ quiz.title }}</h1>
+
+    <h2>quizresult.key {{ quizresult.key }}</h2>
+
+    {% comment %}
+    {{ quiz.body_html|safe }}
+    {% if first_question_id %}
+        <p>First question URL: {% url 'vodkamartiniquiz_question_detail' slug=quiz.slug pk=first_question_id %}</p>
+        <p><a href="{% url 'vodkamartiniquiz_question_detail' slug=quiz.slug pk=first_question_id %}">Take the quiz</a></p>
+    {% endif %}
+    <p>Author: <strong>{{ quiz.author.id }} {{ quiz.author.username }}</strong></p>
+    {% endcomment %}
+
+</article>
+
+<p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
+
+{% endblock content %}
