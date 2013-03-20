@@ -64,7 +64,7 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
         return {'question': self.get_object(), 'user': self.request.user}
 
     #def get_success_url(self):
-    #    return '/questions'
+    #    return '/some-url/'
 
     #def get(self, request, *args, **kwargs):
     #    self.object = self.get_object()
@@ -78,7 +78,7 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
     def form_valid(self, form):
         # TODO form.save() should return something to be used later in this method
         # and that something will indicate where to redirect next
-        form.save()
+        result = form.save()
         # TODO, change success_url to move to next question or to results
         self.success_url = '/quiz/quiz-2/question/41/'
         messages.info(self.request, 'Question answered.')
