@@ -18,7 +18,9 @@
 <article>
     <h1>Results for {{ quiz.title }}</h1>
 
-    <h2>quizresult.key {{ quizresult.key }}</h2>
+    <h2>quizresult.letter {{ quizresult.letter }}</h2>
+    <h2>quizresult.description {{ quizresult.description }}</h2>
+    <h2>letter_count {{ letter_count }}</h2>
 
     {% comment %}
     {{ quiz.body_html|safe }}
@@ -30,6 +32,8 @@
     {% endcomment %}
 
 </article>
+
+<p>This quiz URL: <a href="{{ quiz.get_absolute_url }}">{{ quiz.get_absolute_url }}</a></p>
 
 <p><a href="{% url 'vodkamartiniquiz_quiz_home' %}">back to quizzes home</a></p>
 

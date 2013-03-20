@@ -24,7 +24,7 @@ class QuizHome(ListView):
     queryset = Quiz.live.all()
     paginate_by = 2
 
-class QuizDetail(LoginRequiredMixin, DetailView):
+class QuizDetail(DetailView):
     """
     Show details for one quiz. As in QuizHome, we can use either model or queryset here.
     We chose queryset to make sure we only show live quizzes.
@@ -87,14 +87,24 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
     #def get_form(self, form):
     #    pass
 
+    def redirect_previous_question(self):
+        return HttpResponseRedirect(reverse('vodkamartiniquiz_question_detail', 
+                                                kwargs={'slug': self.object.quiz.slug, 'pk': self.previous_question_id}
+                                       ))
+
     def form_valid(self, form):
         #messages.info(self.request, 'Question answered.')
-        self.success_url = form.save()
-        return super(QuestionDetail, self).form_valid(form)
+        if 'previous_question' in self.request.POST:
+            return self.redirect_previous_question()
+        if 'next_question' in self.request.POST:
+            self.success_url = form.save()
+            return super(QuestionDetail, self).form_valid(form)
 
-    #def form_invalid(self, form):
-    #    messages.info(self.request, 'Submission problem, please try again.')
-    #    return super(QuestionDetail, self).form_invalid(form)
+    def form_invalid(self, form):
+        #messages.info(self.request, 'Submission problem, please try again.')
+        if 'previous_question' in self.request.POST:
+            return self.redirect_previous_question()
+        return super(QuestionDetail, self).form_invalid(form)
 
     def get_context_data(self, **kwargs):
         """
@@ -131,24 +141,23 @@ class QuestionDetail(LoginRequiredMixin, FormView, SingleObjectMixin):
 
         return previous_pk
 
-class QuizResultDetail(DetailView):
+class QuizResultDetail(LoginRequiredMixin, DetailView):
     """
     Show result for quiz for currently logged in user
     """
     model = Quiz
     template_name = 'vodkamartiniquiz/quizresult_detail.html'
-    #url(r'^(?P<slug>[-\w]+)/result/$', QuizResult.as_view(), name='vodkamartiniquiz_quizresult_detail'),
 
     def get_context_data(self, **kwargs):
         """
         Populate the context to add quiz result data.
+        As this is a DetailView for the Quiz model we already are passing quiz in the context.
         """
         if self.request.user.is_authenticated():
-            userquizresult = QuizResult.objects.userquizresult(quiz=self.object, user=self.request.user)
-        else:
-            pass
+            quizresult = QuizResult.objects.userquizresult(quiz=self.object, user=self.request.user)
         context = super(QuizResultDetail, self).get_context_data(**kwargs)
-        context['quizresult'] = {'key': 'this is a value'}
+        context['quizresult'] = quizresult['quizresult']
+        context['letter_count'] = quizresult['letter_count']
         #context['object'] = self.object
         #context['quiz_slug'] = self.object.quiz.slug
         #context['pk'] = self.pk

@@ -61,6 +61,7 @@ class QuizResultAdmin(admin.ModelAdmin):
 
 class UserQuizAnswerAdmin(admin.ModelAdmin):
     list_display = ('user', 'quiz', 'answer', 'question')
+    readonly_fields = ('user', 'quiz', 'answer')
 
     def question(self, instance):
         return instance.answer.question

@@ -1,6 +1,7 @@
 from datetime import timedelta
 from django.utils.timezone import now
 from django.db import models
+from django.db.models import Count
 from django.contrib.auth.models import User
 from vodkamartiniarticle.models import BaseArticle
 
@@ -104,7 +105,7 @@ class UserQuizAnswerManager(models.Manager):
         the total points for quizzes using points scoring.
         """
 
-        userquizanswers = self.model.objects.filter(quiz=quiz, user=user)
+        userquizanswers = self.model.objects.filter(quiz=quiz, user=user).values('user', 'quiz', 'answer__letter').order_by('-letter_count').annotate(letter_count=Count('answer__letter'))
         return userquizanswers
 
 class UserQuizAnswer(models.Model):
@@ -132,17 +133,18 @@ class QuizResultManager(models.Manager):
         """
 
         userquizanswers = UserQuizAnswer.objects.userquizanswers(quiz, user)
-        print userquizanswers
-        for x in userquizanswers:
-            print x.answer
+
         if quiz.scoring == Quiz.LETTERS_SCORING:
-            print "letters scoring"
-            quizresult = None
+            letter_count = userquizanswers[0]['letter_count']
+            letter = userquizanswers[0]['answer__letter']
+            quizresult = QuizResult.objects.get(quiz=quiz, letter=letter)
+            result = {'quizresult': quizresult, 'letter_count': letter_count}
         if quiz.scoring == Quiz.POINTS_SCORING:
             # TODO when we activate points scoring
             quizresult = None
-        quizresult = None
-        return quizresult
+            result = {'quizresult': quizresult}
+
+        return result
 
 class QuizResult(models.Model):
     """
