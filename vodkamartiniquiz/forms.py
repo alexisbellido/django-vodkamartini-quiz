@@ -79,8 +79,13 @@ class QuestionForm(forms.Form):
             self.fields['answer'].queryset = self.question.answer_set.all().order_by('letter')
 
     def save(self):
-        userquizanswer = UserQuizAnswer(user=self.user, quiz=self.question.quiz, answer=self.cleaned_data['answer'])
+        try:
+            userquizanswer = UserQuizAnswer.objects.get(user=self.user, quiz=self.question.quiz, answer__question=self.question)
+            userquizanswer.answer = self.cleaned_data['answer']
+        except UserQuizAnswer.DoesNotExist:
+            userquizanswer = UserQuizAnswer(user=self.user, quiz=self.question.quiz, answer=self.cleaned_data['answer'])
         userquizanswer.save()
+
         if self.next_question_id:
             success_url = reverse('vodkamartiniquiz_question_detail', kwargs={'slug': self.question.quiz.slug, 'pk': self.next_question_id})
         else:

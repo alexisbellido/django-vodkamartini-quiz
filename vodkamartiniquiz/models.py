@@ -132,7 +132,6 @@ class QuizResultManager(models.Manager):
         """
 
         userquizanswers = UserQuizAnswer.objects.userquizanswers(quiz, user)
-        print "userquizanswers from the manager method"
         print userquizanswers
         for x in userquizanswers:
             print x.answer
