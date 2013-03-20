@@ -1,8 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.contrib import admin
 from django.contrib.auth.models import User
-from vodkamartiniquiz.models import Quiz, Question, Answer, QuizResult
-from vodkamartiniquiz.forms import QuizAdminForm
+from .models import Quiz, Question, Answer, QuizResult, UserQuizAnswer
+from .forms import QuizAdminForm
 
 class QuizResultInline(admin.TabularInline):
     model = QuizResult
@@ -59,7 +59,14 @@ class QuizResultAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'quiz', 'letter', 'min_points', 'max_points')
     raw_id_fields = ('quiz',)
 
+class UserQuizAnswerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'quiz', 'answer', 'question')
+
+    def question(self, instance):
+        return instance.answer.question
+
 #admin.site.register(Answer, AnswerAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(QuizResult, QuizResultAdmin)
+admin.site.register(UserQuizAnswer, UserQuizAnswerAdmin)

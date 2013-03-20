@@ -113,6 +113,12 @@ class UserQuizAnswer(models.Model):
     answer = models.ForeignKey(Answer)
     objects = UserQuizAnswerManager()
 
+    class Meta:
+        ordering = ["user", "-quiz"]
+
+    def __unicode__(self):
+        return "%s - %s (%s)" % (self.answer, self.user, self.quiz)
+
 class QuizResultManager(models.Manager):
     """
     Manager with additional methods.
