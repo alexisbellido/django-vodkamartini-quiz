@@ -1,6 +1,5 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from .views import QuizHome, QuizDetail, QuestionDetail, QuizResultDetail
-#from .views import QuizCreate
 
 urlpatterns = patterns('vodkamartiniquiz.views',
     url(r'^$', QuizHome.as_view(), name='vodkamartiniquiz_quiz_home'),
